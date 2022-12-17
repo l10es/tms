@@ -1,0 +1,25 @@
+name: Development task
+description: Create a task to develop the feature which we want to realize in this application.
+title: "[Task]: "
+labels: ["development"]
+assignees:
+  - Danboruya
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for adding or realize the task which we have to develop the feature.
+  - type: textarea
+    id: task-detail
+    attributes:
+      label: Task Details
+      description: What we need to develop the feature of this application.
+    validations:
+      required: true
+  - type: textarea
+    id: task-goal
+    attributes:
+      label: Task Goal
+      description: What is goal of this task.
+    validations:
+      required: true
