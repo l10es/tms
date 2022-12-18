@@ -16,4 +16,10 @@
 
 <resources>
     <string name="app_name">tms</string>
+    <string name="home">Home</string>
+    <string name="my_page">My Page</string>
+    <string name="all_done">Your task all Done!</string>
+    <string name="fab_icon">Add task</string>
+    <string name="welcome">Welcome to TMS</string>
+    <string name="current_tasks">Your tasks</string>
 </resources>

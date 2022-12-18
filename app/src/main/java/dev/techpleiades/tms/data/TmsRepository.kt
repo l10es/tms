@@ -16,26 +16,70 @@
 
 package dev.techpleiades.tms.data
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import dev.techpleiades.tms.data.local.database.Task
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import dev.techpleiades.tms.data.local.database.Tms
 import dev.techpleiades.tms.data.local.database.TmsDao
+import java.time.LocalDateTime
+import java.util.*
 import javax.inject.Inject
 
 interface TmsRepository {
-    val tmss: Flow<List<String>>
+    val tasks: Flow<List<Task>>
 
-    suspend fun add(name: String)
+    suspend fun add(
+        name: String,
+        description: String,
+        status: String,
+        startAt: LocalDateTime?,
+        endAt: LocalDateTime?
+    )
+
+    suspend fun remove(uid: Long)
+
+    suspend fun update(task: Task)
+
+    suspend fun findByName(name: String): Flow<List<Task>>
 }
 
 class DefaultTmsRepository @Inject constructor(
     private val tmsDao: TmsDao
 ) : TmsRepository {
 
-    override val tmss: Flow<List<String>> =
-        tmsDao.getTmss().map { items -> items.map { it.name } }
+    override val tasks: Flow<List<Task>> =
+        tmsDao.getTasks()
 
-    override suspend fun add(name: String) {
-        tmsDao.insertTms(Tms(name = name))
+    @RequiresApi(Build.VERSION_CODES.O)
+    override suspend fun add(
+        name: String,
+        description: String,
+        status: String,
+        startAt: LocalDateTime?,
+        endAt: LocalDateTime?
+    ) {
+        tmsDao.insertTask(
+            Task(
+                name = name,
+                description = description,
+                status = status,
+                startAt = startAt,
+                endAt = endAt,
+                createAt = LocalDateTime.now()
+            ))
     }
+
+    override suspend fun remove(uid: Long) {
+        tmsDao.removeTask(uid = uid)
+    }
+
+    override suspend fun update(task: Task) {
+        tmsDao.updateTask(item = task)
+    }
+
+    override suspend fun findByName(name: String): Flow<List<Task>> {
+        return tmsDao.getTasksByName(name = "${name}%")
+    }
+
 }

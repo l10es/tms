@@ -18,8 +18,11 @@ package dev.techpleiades.tms.data.local.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import dev.techpleiades.tms.data.utils.DateConverter
 
-@Database(entities = [Tms::class], version = 1)
+@Database(entities = [Task::class], version = 1)
+@TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun tmsDao(): TmsDao
 }
