@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 The Android Open Source Project
+ * Copyright (C) 2023 TMS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,28 +14,8 @@
  * limitations under the License.
  */
 
-package dev.techpleiades.tms.data.local.database
+package dev.techpleiades.tms.data.enums
 
-import androidx.room.Dao
-import androidx.room.Entity
-import androidx.room.Insert
-import androidx.room.PrimaryKey
-import androidx.room.Query
-import kotlinx.coroutines.flow.Flow
-
-@Entity
-data class Tms(
-    val name: String
-) {
-    @PrimaryKey(autoGenerate = true)
-    var uid: Int = 0
-}
-
-@Dao
-interface TmsDao {
-    @Query("SELECT * FROM tms ORDER BY uid DESC LIMIT 10")
-    fun getTmss(): Flow<List<Tms>>
-
-    @Insert
-    suspend fun insertTms(item: Tms)
-}
+//enum class TaskStates {
+//    New, Start, WIP, Done, Archived
+//}

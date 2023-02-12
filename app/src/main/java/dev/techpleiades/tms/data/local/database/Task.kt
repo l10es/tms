@@ -29,35 +29,56 @@
  * limitations under the License.
  */
 
-package dev.techpleiades.tms.data.local.di
+package dev.techpleiades.tms.data.local.database
 
-import android.content.Context
-import androidx.room.Room
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import dev.techpleiades.tms.data.local.database.AppDatabase
-import dev.techpleiades.tms.data.local.database.TmsDao
-import javax.inject.Singleton
+import androidx.room.*
+import kotlinx.coroutines.flow.Flow
+import java.time.LocalDateTime
+import java.util.*
 
+@Entity(tableName = "task")
+data class Task(
+    @ColumnInfo(name = "name")
+    val name: String,
 
-@Module
-@InstallIn(SingletonComponent::class)
-class DatabaseModule {
-    @Provides
-    fun provideTmsDao(appDatabase: AppDatabase): TmsDao {
-        return appDatabase.tmsDao()
-    }
+    @ColumnInfo(name = "description")
+    val description: String?,
 
-    @Provides
-    @Singleton
-    fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
-        return Room.databaseBuilder(
-            appContext,
-            AppDatabase::class.java,
-            "Tms"
-        ).build()
-    }
+    /**
+     * Task status
+     *
+     * New, Start, WIP, Done, Archived
+     */
+    @ColumnInfo(name = "status")
+    val status: String,
+
+    @ColumnInfo(name = "start_at")
+    val startAt: LocalDateTime?,
+
+    @ColumnInfo(name = "end_at")
+    val endAt: LocalDateTime?,
+
+    @ColumnInfo(name = "created_at")
+    val createAt: LocalDateTime,
+) {
+    @PrimaryKey(autoGenerate = true)
+    var uid: Long = 0L
+}
+
+@Dao
+interface TmsDao {
+    @Query("SELECT * FROM task ORDER BY uid DESC LIMIT 10")
+    fun getTasks(): Flow<List<Task>>
+
+    @Query("SELECT * FROM task WHERE name LIKE :name ")
+    fun getTasksByName(name: String?): Flow<List<Task>>
+
+    @Insert
+    suspend fun insertTask(item: Task)
+
+    @Update
+    suspend fun updateTask(item: Task)
+
+    @Query("DELETE FROM task WHERE uid = :uid")
+    suspend fun removeTask(uid: Long)
 }
