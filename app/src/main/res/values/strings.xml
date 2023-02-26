@@ -22,4 +22,6 @@
     <string name="fab_icon">Add task</string>
     <string name="welcome">Welcome to TMS</string>
     <string name="current_tasks">Your tasks</string>
+    <string name="enter_task_name">Enter your task name</string>
+    <string name="enter_task_description">Enter your task description</string>
 </resources>

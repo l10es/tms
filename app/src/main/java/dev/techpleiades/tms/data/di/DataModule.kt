@@ -83,6 +83,10 @@ class FakeTmsRepository @Inject constructor() : TmsRepository {
     override suspend fun findByName(name: String): Flow<List<Task>> {
         throw NotImplementedError()
     }
+
+    override fun findByUid(uid: Long): Flow<Task> {
+        throw NotImplementedError()
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

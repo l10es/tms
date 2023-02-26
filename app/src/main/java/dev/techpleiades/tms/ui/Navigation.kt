@@ -32,20 +32,25 @@
 package dev.techpleiades.tms.ui
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dev.techpleiades.tms.R
 import dev.techpleiades.tms.ui.home.HomeScreen
+import dev.techpleiades.tms.ui.theme.MyApplicationTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -92,13 +97,28 @@ fun MainNavigation() {
         ) {
             composable(Screen.Home.route) {
                 HomeScreen(
-                    modifier = Modifier.padding(innerPadding))
+                    modifier = Modifier.padding(innerPadding)
+                )
             }
 
             composable(Screen.MyPage.route) {
                 // TODO: Add My page screen
-                throw NotImplementedError()
+                // Currently dummy text in this page
+                Box (Modifier.fillMaxSize()){
+                    Text(
+                        text = stringResource(id = R.string.my_page),
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun tmsAppPreview() {
+    MyApplicationTheme {
+        MainNavigation()
     }
 }

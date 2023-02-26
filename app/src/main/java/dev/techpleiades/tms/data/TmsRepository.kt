@@ -44,6 +44,15 @@ import javax.inject.Inject
 interface TmsRepository {
     val tasks: Flow<List<Task>>
 
+    /**
+     * Register the task to room
+     *
+     * @param name Name of task
+     * @param description Contents of task
+     * @param status Current task status
+     * @param startAt Task start date and time
+     * @param endAt Task end date and time
+     */
     suspend fun add(
         name: String,
         description: String,
@@ -52,11 +61,34 @@ interface TmsRepository {
         endAt: LocalDateTime?
     )
 
+    /**
+     * Remove Task with which has specified uid.
+     *
+     * @param uid Target task UID
+     */
     suspend fun remove(uid: Long)
 
+    /**
+     * Update task contents.
+     *
+     * @param task Task object which target to update
+     */
     suspend fun update(task: Task)
 
+    /**
+     * Search the task by task name.
+     * Search with prefix match.
+     *
+     * @param name Target task name
+     */
     suspend fun findByName(name: String): Flow<List<Task>>
+
+    /**
+     * Search the task by uid.
+     *
+     * @param uid Target task UID
+     */
+    fun findByUid(uid: Long): Flow<Task>
 }
 
 class DefaultTmsRepository @Inject constructor(
@@ -95,6 +127,10 @@ class DefaultTmsRepository @Inject constructor(
 
     override suspend fun findByName(name: String): Flow<List<Task>> {
         return tmsDao.getTasksByName(name = "${name}%")
+    }
+
+    override fun findByUid(uid: Long): Flow<Task> {
+        return tmsDao.getTaskById(uid = uid)
     }
 
 }

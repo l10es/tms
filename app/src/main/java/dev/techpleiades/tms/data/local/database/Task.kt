@@ -39,10 +39,10 @@ import java.util.*
 @Entity(tableName = "task")
 data class Task(
     @ColumnInfo(name = "name")
-    val name: String,
+    var name: String = "",
 
     @ColumnInfo(name = "description")
-    val description: String?,
+    var description: String = "",
 
     /**
      * Task status
@@ -50,7 +50,7 @@ data class Task(
      * New, Start, WIP, Done, Archived
      */
     @ColumnInfo(name = "status")
-    val status: String,
+    var status: String,
 
     @ColumnInfo(name = "start_at")
     val startAt: LocalDateTime?,
@@ -72,6 +72,9 @@ interface TmsDao {
 
     @Query("SELECT * FROM task WHERE name LIKE :name ")
     fun getTasksByName(name: String?): Flow<List<Task>>
+
+    @Query("SELECT * FROM task WHERE uid = :uid")
+    fun getTaskById(uid: Long): Flow<Task>
 
     @Insert
     suspend fun insertTask(item: Task)
